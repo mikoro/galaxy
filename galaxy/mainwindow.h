@@ -7,6 +7,17 @@
 #include <QOpenGLVertexArrayObject>
 #include <QMatrix4x4>
 
+#include <vector>
+
+struct Star
+{
+	float x;
+	float y;
+	float r;
+	float g;
+	float b;
+};
+
 class MainWindow : public QOpenGLWindow, protected QOpenGLFunctions_4_5_Core
 {
 public:
@@ -24,4 +35,6 @@ private:
 	QOpenGLVertexArrayObject vao;
 
 	QMatrix4x4 projectionMatrix;
+
+	std::vector<Star> stars;
 };

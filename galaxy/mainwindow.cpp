@@ -42,17 +42,36 @@ void MainWindow::initializeGL()
 		return;
 	}
 
-	float vboData[] =
-	{
-		10.0f, 200.0f,   1.0f, 0.0f, 0.0f,
-		300.0f, 100.0f,   0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f,   0.0f, 0.0f, 1.0f
-	};
+	stars.resize(4);
+
+	stars[0].x = 0;
+	stars[0].y = 0;
+	stars[0].r = 1;
+	stars[0].g = 0;
+	stars[0].b = 0;
+
+	stars[1].x = 30;
+	stars[1].y = 30;
+	stars[1].r = 0;
+	stars[1].g = 1;
+	stars[1].b = 0;
+
+	stars[2].x = 60;
+	stars[2].y = 60;
+	stars[2].r = 0;
+	stars[2].g = 0;
+	stars[2].b = 1;
+
+	stars[3].x = 90;
+	stars[3].y = 90;
+	stars[3].r = 1;
+	stars[3].g = 0;
+	stars[3].b = 1;
 
 	vertexBuffer.create();
 	vertexBuffer.bind();
 	vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-	vertexBuffer.allocate(vboData, sizeof(vboData));
+	vertexBuffer.allocate(stars.data(), int(sizeof(Star) * stars.size()));
 
 	vao.create();
 	vao.bind();
@@ -80,7 +99,7 @@ void MainWindow::paintGL()
 	program.bind();
 	program.setUniformValue("projectionMatrix", projectionMatrix);
 	vao.bind();
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_POINTS, 0, int(stars.size()));
 	vao.release();
 	program.release();
 }

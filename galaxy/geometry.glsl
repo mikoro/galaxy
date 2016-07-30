@@ -1,7 +1,7 @@
 #version 450 core
 
-layout(triangles) in;
-layout(triangle_strip, max_vertices = 3) out;
+layout(points) in;
+layout(triangle_strip, max_vertices = 4) out;
 
 uniform mat4 projectionMatrix;
 
@@ -10,12 +10,22 @@ out vec3 gColor;
 
 void main(void)
 {
-	for (int i = 0; i < gl_in.length(); ++i)
-	{
-		gl_Position = projectionMatrix * gl_in[i].gl_Position;
-		gColor = vColor[i];
-		EmitVertex();
-	}
+	const vec4 position = gl_in[0].gl_Position;
+	const vec3 color = vColor[0];
+
+	gColor = color;
+
+	gl_Position = projectionMatrix * (position + vec4(-10, -10, 0, 0));
+	EmitVertex();
+
+	gl_Position = projectionMatrix * (position + vec4(-10, 10, 0, 0));
+	EmitVertex();
+
+	gl_Position = projectionMatrix * (position + vec4(10, -10, 0, 0));
+	EmitVertex();
+
+	gl_Position = projectionMatrix * (position + vec4(10, 10, 0, 0));
+	EmitVertex();
 
 	EndPrimitive();
 }

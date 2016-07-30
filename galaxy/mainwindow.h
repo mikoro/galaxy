@@ -13,9 +13,11 @@ struct Star
 {
 	float x;
 	float y;
+	float size;
 	float r;
 	float g;
 	float b;
+	float a;
 };
 
 class MainWindow : public QOpenGLWindow, protected QOpenGLFunctions_4_5_Core

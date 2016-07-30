@@ -2,6 +2,8 @@
 
 #include <QtDebug>
 
+#include <random>
+
 MainWindow::MainWindow() : vertexBuffer(QOpenGLBuffer::VertexBuffer)
 {
 }
@@ -42,31 +44,24 @@ void MainWindow::initializeGL()
 		return;
 	}
 
-	stars.resize(4);
+	stars.resize(100);
 
-	stars[0].x = 0;
-	stars[0].y = 0;
-	stars[0].r = 1;
-	stars[0].g = 0;
-	stars[0].b = 0;
+	std::random_device rd;
+	std::mt19937 random(rd());
+	std::uniform_real_distribution<float> randomPositionX(-width() / 2.0f, width() / 2.0f);
+	std::uniform_real_distribution<float> randomPositionY(-height() / 2.0f, height() / 2.0f);
+	std::uniform_real_distribution<float> randomSize(5.0f, 40.0f);
 
-	stars[1].x = 30;
-	stars[1].y = 30;
-	stars[1].r = 0;
-	stars[1].g = 1;
-	stars[1].b = 0;
-
-	stars[2].x = 60;
-	stars[2].y = 60;
-	stars[2].r = 0;
-	stars[2].g = 0;
-	stars[2].b = 1;
-
-	stars[3].x = 90;
-	stars[3].y = 90;
-	stars[3].r = 1;
-	stars[3].g = 0;
-	stars[3].b = 1;
+	for (size_t i = 0; i < stars.size(); ++i)
+	{
+		stars[i].x = randomPositionX(random);
+		stars[i].y = randomPositionY(random);
+		stars[i].size = randomSize(random);
+		stars[i].r = 1;
+		stars[i].g = 0;
+		stars[i].b = 0;
+		stars[i].a = 0.5f;
+	}
 
 	vertexBuffer.create();
 	vertexBuffer.bind();
@@ -78,8 +73,10 @@ void MainWindow::initializeGL()
 
 	program.enableAttributeArray(0);
 	program.enableAttributeArray(1);
-	program.setAttributeBuffer(0, GL_FLOAT, sizeof(float) * 0, 2, sizeof(float) * 5);
-	program.setAttributeBuffer(1, GL_FLOAT, sizeof(float) * 2, 3, sizeof(float) * 5);
+	program.enableAttributeArray(2);
+	program.setAttributeBuffer(0, GL_FLOAT, sizeof(float) * 0, 2, sizeof(float) * 7);
+	program.setAttributeBuffer(1, GL_FLOAT, sizeof(float) * 2, 1, sizeof(float) * 7);
+	program.setAttributeBuffer(2, GL_FLOAT, sizeof(float) * 3, 4, sizeof(float) * 7);
 
 	vao.release();
 	vertexBuffer.release();

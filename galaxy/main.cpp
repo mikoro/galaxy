@@ -7,15 +7,16 @@ int main(int argc, char *argv[])
 	QGuiApplication app(argc, argv);
 
 	QSurfaceFormat format;
-	format.setSwapInterval(0);
+	format.setRenderableType(QSurfaceFormat::OpenGL);
+	format.setProfile(QSurfaceFormat::CoreProfile);
+	format.setVersion(4,5);
+	format.setSwapInterval(1);
 
 	MainWindow window;
 	window.setFormat(format);
 	window.resize(1280, 720);
 	window.setTitle("Galaxy");
 	window.show();
-
-	window.setAnimating(true);
 
 	return app.exec();
 }

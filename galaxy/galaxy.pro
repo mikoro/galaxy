@@ -4,11 +4,9 @@ TEMPLATE = app
 #CONFIG += console
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    openglwindow.cpp
+        mainwindow.cpp
 
-HEADERS  += mainwindow.h \
-    openglwindow.h
+HEADERS  += mainwindow.h
 
 DISTFILES += \
     compute1.glsl \

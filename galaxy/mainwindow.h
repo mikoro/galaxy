@@ -13,10 +13,5 @@ public:
 
 private:
 
-	GLuint m_posAttr;
-	GLuint m_colAttr;
-	GLuint m_matrixUniform;
-
-	QOpenGLShaderProgram* m_program;
-	int m_frame;
+	QOpenGLShaderProgram* program = nullptr;
 };

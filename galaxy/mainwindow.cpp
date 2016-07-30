@@ -84,12 +84,16 @@ void MainWindow::initializeGL()
 	vao.release();
 	vertexBuffer.release();
 	program.release();
+
+	glEnable(GL_BLEND);
+	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 }
 
 void MainWindow::resizeGL(int width, int height)
 {
 	projectionMatrix.setToIdentity();
-	projectionMatrix.ortho(-width / 2, width / 2, -height / 2, height / 2, -100, 100);
+	projectionMatrix.ortho(-width / 2.0f, width / 2.0f, -height / 2.0f, height / 2.0f, -100.0f, 100.0f);
 }
 
 void MainWindow::paintGL()

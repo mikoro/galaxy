@@ -1,6 +1,7 @@
 #version 450 core
 
 #define STAR_COUNT 32768
+#define COMPUTE_GROUP_SIZE 512
 
 struct Star
 {
@@ -16,7 +17,7 @@ layout (std140, binding = 0) buffer StarBuffer
 	Star stars[];
 };
 
-layout(local_size_x = 1024) in;
+layout(local_size_x = COMPUTE_GROUP_SIZE) in;
 
 void main()
 {

@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 
 #include <QtDebug>
+#include <QKeyEvent>
 
 #include <array>
 #include <iostream>
@@ -84,48 +85,10 @@ void MainWindow::initializeGL()
 
 	stars.resize(STAR_COUNT);
 
-	std::random_device rd;
-	std::mt19937 random(rd());
-	std::uniform_real_distribution<float> randomPositionX(-width() / 2.0f, width() / 2.0f);
-	std::uniform_real_distribution<float> randomPositionY(-height() / 2.0f, height() / 2.0f);
-	std::uniform_real_distribution<float> randomVelocity(-10.0f, 10.0f);
-	std::array<float, 3> x = {{STAR_MIN_SIZE, (STAR_MAX_SIZE - STAR_MIN_SIZE) / 2.0f, STAR_MAX_SIZE}};
-	std::array<float, 2> p = {{0.9f, 0.1f}};
-	std::piecewise_constant_distribution<float> randomSize(x.begin(), x.end(), p.begin());
-	std::uniform_real_distribution<float> randomAlpha(0.4f, 0.8f);
-
-	ColorGradient gradient;
-	gradient.addSegment(Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 0.0f), 10);
-	gradient.addSegment(Color(1.0f, 1.0f, 0.0f), Color(1.0f, 0.0f, 0.0f), 10);
-
-	for (size_t i = 0; i < stars.size(); ++i)
-	{
-		stars[i].position.x = randomPositionX(random);
-		stars[i].position.y = randomPositionY(random);
-		stars[i].position.z = 0.0f;
-		stars[i].position.w = 1.0f;
-		stars[i].velocity.x = randomVelocity(random);
-		stars[i].velocity.y = randomVelocity(random);
-		stars[i].velocity.x = 0.0f;
-		stars[i].velocity.y = 0.0f;
-		stars[i].velocity.z = 0.0f;
-		stars[i].velocity.w = 0.0f;
-		stars[i].force.x = 0.0f;
-		stars[i].force.y = 0.0f;
-		stars[i].force.z = 0.0f;
-		stars[i].force.w = 0.0f;
-		stars[i].size.x = randomSize(random);
-		stars[i].size.y = stars[i].size.x;
-		stars[i].size.z = 0.0f;
-		stars[i].size.w = 0.0f;
-		stars[i].color = gradient.getColor((std::max(stars[i].size.x, stars[i].size.y) - STAR_MIN_SIZE) / (STAR_MAX_SIZE - STAR_MIN_SIZE));
-		stars[i].color.a = randomAlpha(random);
-	}
-
 	vertexBuffer.create();
 	vertexBuffer.bind();
 	vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-	vertexBuffer.allocate(stars.data(), int(sizeof(Star) * stars.size()));
+	vertexBuffer.allocate(int(sizeof(Star) * stars.size()));
 
 	vao.create();
 	vao.bind();
@@ -148,6 +111,8 @@ void MainWindow::initializeGL()
 	glEnable(GL_BLEND);
 	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+
+	initStars();
 
 	elapsedTimer.restart();
 }
@@ -186,4 +151,53 @@ void MainWindow::paintGL()
 	renderProgram.release();
 
 	update();
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* event)
+{
+	if (event->key() == Qt::Key_Space)
+		initStars();
+}
+
+void MainWindow::initStars()
+{
+	std::random_device rd;
+	std::mt19937 random(rd());
+	std::uniform_real_distribution<float> randomPositionX(-width() / 2.0f, width() / 2.0f);
+	std::uniform_real_distribution<float> randomPositionY(-height() / 2.0f, height() / 2.0f);
+	std::uniform_real_distribution<float> randomVelocity(-40.0f, 40.0f);
+	std::array<float, 3> x = {{STAR_MIN_SIZE, (STAR_MAX_SIZE - STAR_MIN_SIZE) / 2.0f, STAR_MAX_SIZE}};
+	std::array<float, 2> p = {{0.99f, 0.01f}};
+	std::piecewise_constant_distribution<float> randomSize(x.begin(), x.end(), p.begin());
+	std::uniform_real_distribution<float> randomAlpha(0.1f, 0.9f);
+
+	ColorGradient gradient;
+	gradient.addSegment(Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 0.0f), 10);
+	gradient.addSegment(Color(1.0f, 1.0f, 0.0f), Color(1.0f, 0.0f, 0.0f), 10);
+
+	for (size_t i = 0; i < stars.size(); ++i)
+	{
+		stars[i].position.x = randomPositionX(random);
+		stars[i].position.y = randomPositionY(random);
+		stars[i].position.z = 0.0f;
+		stars[i].position.w = 1.0f;
+		stars[i].velocity.x = randomVelocity(random);
+		stars[i].velocity.y = randomVelocity(random);
+		stars[i].velocity.z = 0.0f;
+		stars[i].velocity.w = 0.0f;
+		stars[i].force.x = 0.0f;
+		stars[i].force.y = 0.0f;
+		stars[i].force.z = 0.0f;
+		stars[i].force.w = 0.0f;
+		stars[i].size.x = randomSize(random);
+		stars[i].size.y = stars[i].size.x;
+		stars[i].size.z = 0.0f;
+		stars[i].size.w = 0.0f;
+		stars[i].color = gradient.getColor((std::max(stars[i].size.x, stars[i].size.y) - STAR_MIN_SIZE) / (STAR_MAX_SIZE - STAR_MIN_SIZE));
+		stars[i].color.a = randomAlpha(random);
+	}
+
+	vertexBuffer.bind();
+	vertexBuffer.write(0, stars.data(), int(sizeof(Star) * stars.size()));
+	vertexBuffer.release();
 }

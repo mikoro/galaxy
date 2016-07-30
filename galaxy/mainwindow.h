@@ -16,8 +16,8 @@
 #include "colorgradient.h"
 
 #define STAR_COUNT 32768
-#define COMPUTE_GROUP_SIZE 1024
-#define STAR_MIN_SIZE 1.0f
+#define COMPUTE_GROUP_SIZE 512
+#define STAR_MIN_SIZE 2.0f
 #define STAR_MAX_SIZE 30.0f
 
 struct Vec4f
@@ -47,7 +47,13 @@ public:
 	void resizeGL(int width, int height) override;
 	void paintGL() override;
 
+protected:
+
+	void keyPressEvent(QKeyEvent* event) override;
+
 private:
+
+	void initStars();
 
 	QOpenGLBuffer vertexBuffer;
 	QOpenGLVertexArrayObject vao;

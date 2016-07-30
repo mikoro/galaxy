@@ -18,6 +18,14 @@ void MainWindow::initializeGL()
 		return;
 	}
 
+	result = program.addShaderFromSourceFile(QOpenGLShader::Geometry, "geometry.glsl");
+
+	if (!result)
+	{
+		qDebug() << program.log();
+		return;
+	}
+
 	result = program.addShaderFromSourceFile(QOpenGLShader::Fragment, "fragment.glsl");
 
 	if (!result)
@@ -61,8 +69,8 @@ void MainWindow::initializeGL()
 
 void MainWindow::resizeGL(int width, int height)
 {
-	viewMatrix.setToIdentity();
-	viewMatrix.ortho(-width / 2, width / 2, -height / 2, height / 2, -100, 100);
+	projectionMatrix.setToIdentity();
+	projectionMatrix.ortho(-width / 2, width / 2, -height / 2, height / 2, -100, 100);
 }
 
 void MainWindow::paintGL()
@@ -70,7 +78,7 @@ void MainWindow::paintGL()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	program.bind();
-	program.setUniformValue("viewMatrix", viewMatrix);
+	program.setUniformValue("projectionMatrix", projectionMatrix);
 	vao.bind();
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	vao.release();

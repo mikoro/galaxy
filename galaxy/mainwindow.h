@@ -23,5 +23,5 @@ private:
 	QOpenGLBuffer vertexBuffer;
 	QOpenGLVertexArrayObject vao;
 
-	QMatrix4x4 viewMatrix;
+	QMatrix4x4 projectionMatrix;
 };

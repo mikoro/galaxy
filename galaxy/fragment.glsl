@@ -1,9 +1,9 @@
 #version 450 core
 
-in vec3 colorVarying;
-out vec3 color;
+in vec3 gColor;
+out vec3 fColor;
 
 void main()
 {
-	color = colorVarying;
+	fColor = gColor;
 }

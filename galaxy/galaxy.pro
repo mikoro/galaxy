@@ -4,9 +4,11 @@ TEMPLATE = app
 #CONFIG += console
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    colorgradient.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    colorgradient.h
 
 DISTFILES += \
     compute1.glsl \

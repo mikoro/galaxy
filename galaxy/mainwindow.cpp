@@ -1,7 +1,13 @@
+// Copyright © 2016 Mikko Ronkainen <firstname@mikkoronkainen.com>
+// License: MIT, see the LICENSE file.
+
 #include "mainwindow.h"
 
 #include <QtDebug>
 
+#include <array>
+#include <iostream>
+#include <iomanip>
 #include <random>
 
 MainWindow::MainWindow() : vertexBuffer(QOpenGLBuffer::VertexBuffer)
@@ -44,23 +50,30 @@ void MainWindow::initializeGL()
 		return;
 	}
 
-	stars.resize(100);
+	stars.resize(1000);
+	const int MIN_SIZE = 1.0f;
+	const int MAX_SIZE = 30.0f;
 
 	std::random_device rd;
 	std::mt19937 random(rd());
 	std::uniform_real_distribution<float> randomPositionX(-width() / 2.0f, width() / 2.0f);
 	std::uniform_real_distribution<float> randomPositionY(-height() / 2.0f, height() / 2.0f);
-	std::uniform_real_distribution<float> randomSize(5.0f, 40.0f);
+	std::array<float, 3> x = {{MIN_SIZE, (MAX_SIZE - MIN_SIZE) / 2.0f, MAX_SIZE}};
+	std::array<float, 2> p = {{0.9f, 0.1f}};
+	std::piecewise_constant_distribution<float> randomSize(x.begin(), x.end(), p.begin());
+	std::uniform_real_distribution<float> randomAlpha(0.2f, 0.8f);
+
+	ColorGradient gradient;
+	gradient.addSegment(Color(1.0f, 1.0f, 1.0f), Color(1.0f, 1.0f, 0.0f), 10);
+	gradient.addSegment(Color(1.0f, 1.0f, 0.0f), Color(1.0f, 0.0f, 0.0f), 10);
 
 	for (size_t i = 0; i < stars.size(); ++i)
 	{
 		stars[i].x = randomPositionX(random);
 		stars[i].y = randomPositionY(random);
 		stars[i].size = randomSize(random);
-		stars[i].r = 1;
-		stars[i].g = 0;
-		stars[i].b = 0;
-		stars[i].a = 0.5f;
+		stars[i].color = gradient.getColor((stars[i].size - MIN_SIZE) / (MAX_SIZE - MIN_SIZE));
+		stars[i].color.a = randomAlpha(random);
 	}
 
 	vertexBuffer.create();

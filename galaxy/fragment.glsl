@@ -7,10 +7,7 @@ out vec4 fColor;
 void main()
 {
 	float d = distance(gTexCoord, vec2(0.5f, 0.5f));
-	fColor = gColor;
-
-	fColor.r = pow(gColor.r, 1.0f / 2.2f);
-	fColor.g = pow(gColor.g, 1.0f / 2.2f);
-	fColor.b = pow(gColor.b, 1.0f / 2.2f);
-	fColor.a *= 1.0f - 2.0f * d;
+	vec4 color = pow(gColor, vec4(1.0f/2.2f));
+	color.a = gColor.a * (1.0f - (2.0f * d));
+	fColor = clamp(color, 0.0f, 1.0f);
 }

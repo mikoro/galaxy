@@ -14,10 +14,16 @@
 
 #include "colorgradient.h"
 
+#define STAR_COUNT 1024
+#define COMPUTE_GROUP_SIZE 128
+#define STAR_MIN_SIZE 1.0f
+#define STAR_MAX_SIZE 30.0f
+
 struct Star
 {
 	float x;
 	float y;
+	float z;
 	float size;
 	Color color;
 };
@@ -34,9 +40,11 @@ public:
 
 private:
 
-	QOpenGLShaderProgram program;
 	QOpenGLBuffer vertexBuffer;
 	QOpenGLVertexArrayObject vao;
+	QOpenGLShaderProgram renderProgram;
+	QOpenGLShaderProgram computeProgram1;
+	QOpenGLShaderProgram computeProgram2;
 
 	QMatrix4x4 projectionMatrix;
 

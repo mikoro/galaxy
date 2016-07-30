@@ -1,15 +1,17 @@
 #version 450 core
 
-layout(location = 0) in vec3 position;
-layout(location = 1) in float size;
-layout(location = 2) in vec4 color;
+layout(location = 0) in vec4 position;
+layout(location = 1) in vec4 velocity;
+layout(location = 2) in vec4 force;
+layout(location = 3) in vec4 size;
+layout(location = 4) in vec4 color;
 
-out float vSize;
+out vec4 vSize;
 out vec4 vColor;
 
 void main()
 {
-	gl_Position = vec4(position, 1.0f);
+	gl_Position = position;
 	vSize = size;
 	vColor = color;
 }

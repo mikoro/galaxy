@@ -9,22 +9,31 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 #include <QMatrix4x4>
+#include <QElapsedTimer>
 
 #include <vector>
 
 #include "colorgradient.h"
 
-#define STAR_COUNT 1024
-#define COMPUTE_GROUP_SIZE 128
+#define STAR_COUNT 32768
+#define COMPUTE_GROUP_SIZE 1024
 #define STAR_MIN_SIZE 1.0f
 #define STAR_MAX_SIZE 30.0f
 
+struct Vec4f
+{
+	float x = 0.0f;
+	float y = 0.0f;
+	float z = 0.0f;
+	float w = 0.0f;
+};
+
 struct Star
 {
-	float x;
-	float y;
-	float z;
-	float size;
+	Vec4f position;
+	Vec4f velocity;
+	Vec4f force;
+	Vec4f size;
 	Color color;
 };
 
@@ -47,6 +56,8 @@ private:
 	QOpenGLShaderProgram computeProgram2;
 
 	QMatrix4x4 projectionMatrix;
+
+	QElapsedTimer elapsedTimer;
 
 	std::vector<Star> stars;
 };

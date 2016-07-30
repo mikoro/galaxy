@@ -1,9 +1,13 @@
 #version 450 core
 
+#define STAR_COUNT 32768
+
 struct Star
 {
-	vec3 position;
-	float size;
+	vec4 position;
+	vec4 velocity;
+	vec4 force;
+	vec4 size;
 	vec4 color;
 };
 
@@ -12,12 +16,29 @@ layout (std140, binding = 0) buffer StarBuffer
 	Star stars[];
 };
 
-layout(local_size_x = 128) in;
+layout(local_size_x = 1024) in;
 
 void main()
 {
-	uint id = gl_GlobalInvocationID.x;
-	float size = stars[id].size;
+	uint gid = gl_GlobalInvocationID.x;
 
-	stars[id].size += 0.01f;
+	vec2 p1 = stars[gid].position.xy;
+	vec2 s1 = stars[gid].size.xy;
+	float m1 = s1.x * s1.y;
+
+	vec2 f = vec2(0.0f);
+
+	for (int i = 0; i < STAR_COUNT; ++i)
+	{
+		vec2 p2 = stars[i].position.xy;
+		vec2 s2 = stars[i].size.xy;
+		float m2 = s2.x * s2.y;
+		vec2 dir = p2 - p1;
+		float r2 = dir.x * dir.x + dir.y * dir.y;
+
+		if (r2 > 1.0f)
+			f += (0.1f * (m1 * m2) / r2) * normalize(dir);
+	}
+
+	stars[gid].force = vec4(f, 0.0f, 0.0f);
 }

@@ -14,7 +14,8 @@ DISTFILES += \
     compute2.glsl \
     fragment.glsl \
     geometry.glsl \
-    vertex.glsl
+    vertex.glsl \
+    galaxy.ini
 
 files.path = $$OUT_PWD
 files.files += \

@@ -26,6 +26,9 @@ void Settings::load()
 	bigProb = s.value("bigProb").toFloat();
 	maxStartVel = s.value("maxStartVel").toFloat();
 	rotateStart = s.value("rotateStart").toBool();
+	minGravityDist = s.value("minGravityDist").toFloat();
+	gravityCoeff = s.value("gravityCoeff").toFloat();
+	dragCoeff = s.value("dragCoeff").toFloat();
 }
 
 MainWindow::MainWindow() : vertexBuffer(QOpenGLBuffer::VertexBuffer)
@@ -148,6 +151,8 @@ void MainWindow::paintGL()
 
 	computeProgram1.bind();
 	computeProgram1.setUniformValue("count", settings.count);
+	computeProgram1.setUniformValue("minGravityDist", settings.minGravityDist);
+	computeProgram1.setUniformValue("gravityCoeff", settings.gravityCoeff);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, vertexBuffer.bufferId());
 	glDispatchCompute(settings.count / COMPUTE_GROUP_SIZE, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
@@ -155,6 +160,7 @@ void MainWindow::paintGL()
 
 	computeProgram2.bind();
 	computeProgram2.setUniformValue("dt", dt);
+	computeProgram2.setUniformValue("dragCoeff", settings.dragCoeff);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, vertexBuffer.bufferId());
 	glDispatchCompute(settings.count / COMPUTE_GROUP_SIZE, 1, 1);
 	glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);

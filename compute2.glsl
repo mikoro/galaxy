@@ -19,10 +19,11 @@ layout (std140, binding = 0) buffer StarBuffer
 layout(local_size_x = COMPUTE_GROUP_SIZE) in;
 
 uniform float dt;
+uniform float dragCoeff;
 
 void main()
 {
-	const uint gid = gl_GlobalInvocationID.x;
+	uint gid = gl_GlobalInvocationID.x;
 
 	vec2 p = stars[gid].position.xy;
 	vec2 v = stars[gid].velocity.xy;
@@ -31,7 +32,7 @@ void main()
 
 	float m = s.x * s.y;
 	float v2 = v.x * v.x + v.y * v.y;
-	float drag = 0.001f * v2;
+	float drag = dragCoeff * v2;
 
 	v += (f / m) * dt;
 	v += -normalize(v) * drag * dt;

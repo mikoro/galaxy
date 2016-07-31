@@ -19,6 +19,8 @@ layout (std140, binding = 0) buffer StarBuffer
 layout(local_size_x = COMPUTE_GROUP_SIZE) in;
 
 uniform int count;
+uniform float minGravityDist;
+uniform float gravityCoeff;
 
 void main()
 {
@@ -38,8 +40,8 @@ void main()
 		vec2 dir = p2 - p1;
 		float r2 = dir.x * dir.x + dir.y * dir.y;
 
-		if (r2 > 1.0f)
-			f += (0.1f * (m1 * m2) / r2) * normalize(dir);
+		if (r2 > minGravityDist)
+			f += (gravityCoeff * (m1 * m2) / r2) * normalize(dir);
 	}
 
 	stars[gid].force = vec4(f, 0.0f, 0.0f);

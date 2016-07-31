@@ -43,8 +43,11 @@ struct Settings
 	float maxAlpha = 0.9f;
 	float smallProb = 0.99f;
 	float bigProb = 0.01f;
-	float maxStartVel = 40.0f;
+	float maxStartVel = 20.0f;
 	bool rotateStart = false;
+	float minGravityDist = 1.0f;
+	float gravityCoeff = 0.1f;
+	float dragCoeff = 0.001f;
 
 	void load();
 };

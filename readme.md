@@ -5,6 +5,8 @@ A simple OpenGL 2D star/galaxy N-body gravity simulator.
 * Author: [Mikko Ronkainen](http://mikkoronkainen.com)
 * Website: [github.com/mikoro/cellvision](https://github.com/mikoro/galaxy)
 
+[Youtube video](https://youtu.be/vU7oqISAM1k)
+
 ![Screenshot](http://mikoro.github.io/images/galaxy/readme-screenshot.jpg "Screenshot")
 
 ## Download

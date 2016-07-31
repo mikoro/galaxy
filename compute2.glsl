@@ -1,7 +1,6 @@
-#version 450 core
+#version 430 core
 
-#define STAR_COUNT 32768
-#define COMPUTE_GROUP_SIZE 512
+#define COMPUTE_GROUP_SIZE 128
 
 struct Star
 {

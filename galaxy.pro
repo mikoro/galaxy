@@ -16,12 +16,13 @@ DISTFILES += \
     geometry.glsl \
     vertex.glsl
 
-shaders.path = $$OUT_PWD
-shaders.files += \
+files.path = $$OUT_PWD
+files.files += \
     compute1.glsl \
     compute2.glsl \
     fragment.glsl \
     geometry.glsl \
-    vertex.glsl
+    vertex.glsl \
+    galaxy.ini
 
-INSTALLS += shaders
+INSTALLS += files

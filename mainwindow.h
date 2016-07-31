@@ -4,7 +4,7 @@
 #pragma once
 
 #include <QOpenGLWindow>
-#include <QOpenGLFunctions_4_5_Core>
+#include <QOpenGLFunctions_4_3_Core>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
@@ -15,10 +15,7 @@
 
 #include "colorgradient.h"
 
-#define STAR_COUNT 32768
-#define COMPUTE_GROUP_SIZE 512
-#define STAR_MIN_SIZE 2.0f
-#define STAR_MAX_SIZE 30.0f
+#define COMPUTE_GROUP_SIZE 128
 
 struct Vec4f
 {
@@ -37,7 +34,22 @@ struct Star
 	Color color;
 };
 
-class MainWindow : public QOpenGLWindow, protected QOpenGLFunctions_4_5_Core
+struct Settings
+{
+	int count = 32768;
+	float minSize = 2.0f;
+	float maxSize = 30.0f;
+	float minAlpha = 0.1f;
+	float maxAlpha = 0.9f;
+	float smallProb = 0.99f;
+	float bigProb = 0.01f;
+	float maxStartVel = 40.0f;
+	bool rotateStart = false;
+
+	void load();
+};
+
+class MainWindow : public QOpenGLWindow, protected QOpenGLFunctions_4_3_Core
 {
 public:
 
@@ -54,6 +66,8 @@ protected:
 private:
 
 	void initStars();
+
+	Settings settings;
 
 	QOpenGLBuffer vertexBuffer;
 	QOpenGLVertexArrayObject vao;

@@ -1,7 +1,6 @@
-#version 450 core
+#version 430 core
 
-#define STAR_COUNT 32768
-#define COMPUTE_GROUP_SIZE 512
+#define COMPUTE_GROUP_SIZE 128
 
 struct Star
 {
@@ -19,6 +18,8 @@ layout (std140, binding = 0) buffer StarBuffer
 
 layout(local_size_x = COMPUTE_GROUP_SIZE) in;
 
+uniform int count;
+
 void main()
 {
 	uint gid = gl_GlobalInvocationID.x;
@@ -29,7 +30,7 @@ void main()
 
 	vec2 f = vec2(0.0f);
 
-	for (int i = 0; i < STAR_COUNT; ++i)
+	for (int i = 0; i < count; ++i)
 	{
 		vec2 p2 = stars[i].position.xy;
 		vec2 s2 = stars[i].size.xy;

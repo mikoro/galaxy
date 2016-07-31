@@ -4,9 +4,9 @@
 #include "mainwindow.h"
 
 #include <QtDebug>
-#include <QFile>
 #include <QSettings>
 #include <QKeyEvent>
+#include <QMouseEvent>
 
 #include <array>
 #include <iostream>
@@ -29,6 +29,7 @@ void Settings::load()
 	minGravityDist = s.value("minGravityDist").toFloat();
 	gravityCoeff = s.value("gravityCoeff").toFloat();
 	dragCoeff = s.value("dragCoeff").toFloat();
+	mouseMass = s.value("mouseMass").toFloat();
 }
 
 MainWindow::MainWindow() : vertexBuffer(QOpenGLBuffer::VertexBuffer)
@@ -153,6 +154,8 @@ void MainWindow::paintGL()
 	computeProgram1.setUniformValue("count", settings.count);
 	computeProgram1.setUniformValue("minGravityDist", settings.minGravityDist);
 	computeProgram1.setUniformValue("gravityCoeff", settings.gravityCoeff);
+	computeProgram1.setUniformValue("mousePosition", mousePosition);
+	computeProgram1.setUniformValue("mouseMass", mouseMass);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, vertexBuffer.bufferId());
 	glDispatchCompute(settings.count / COMPUTE_GROUP_SIZE, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
@@ -182,6 +185,24 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 {
 	if (event->key() == Qt::Key_Space)
 		initStars();
+}
+
+void MainWindow::mousePressEvent(QMouseEvent* me)
+{
+	if (me->button() == Qt::LeftButton)
+		mouseMass = settings.mouseMass;
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent* me)
+{
+	mousePosition.setX(me->localPos().x() - width() / 2.0f);
+	mousePosition.setY(height() / 2.0f - me->localPos().y());
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent* me)
+{
+	if (me->button() == Qt::LeftButton)
+		mouseMass = 0.0f;
 }
 
 void MainWindow::initStars()

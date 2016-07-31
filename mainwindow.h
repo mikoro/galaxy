@@ -48,6 +48,7 @@ struct Settings
 	float minGravityDist = 1.0f;
 	float gravityCoeff = 0.1f;
 	float dragCoeff = 0.001f;
+	float mouseMass = 100.0f;
 
 	void load();
 };
@@ -65,6 +66,9 @@ public:
 protected:
 
 	void keyPressEvent(QKeyEvent* event) override;
+	void mousePressEvent(QMouseEvent* me) override;
+	void mouseMoveEvent(QMouseEvent* me) override;
+	void mouseReleaseEvent(QMouseEvent* me) override;
 
 private:
 
@@ -79,8 +83,9 @@ private:
 	QOpenGLShaderProgram computeProgram2;
 
 	QMatrix4x4 projectionMatrix;
-
 	QElapsedTimer elapsedTimer;
+	QVector2D mousePosition;
+	float mouseMass = 0.0f;
 
 	std::vector<Star> stars;
 };

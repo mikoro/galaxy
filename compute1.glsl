@@ -21,6 +21,8 @@ layout(local_size_x = COMPUTE_GROUP_SIZE) in;
 uniform int count;
 uniform float minGravityDist;
 uniform float gravityCoeff;
+uniform vec2 mousePosition;
+uniform float mouseMass;
 
 void main()
 {
@@ -43,6 +45,12 @@ void main()
 		if (r2 > minGravityDist)
 			f += (gravityCoeff * (m1 * m2) / r2) * normalize(dir);
 	}
+
+	vec2 dir = mousePosition - p1;
+	float r2 = dir.x * dir.x + dir.y * dir.y;
+
+	if (r2 > minGravityDist)
+		f += (gravityCoeff * (m1 * mouseMass) / r2) * normalize(dir);
 
 	stars[gid].force = vec4(f, 0.0f, 0.0f);
 }

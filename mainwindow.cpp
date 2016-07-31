@@ -22,6 +22,7 @@ void Settings::load()
 	maxSize = s.value("maxSize").toFloat();
 	minAlpha = s.value("minAlpha").toFloat();
 	maxAlpha = s.value("maxAlpha").toFloat();
+	spread = s.value("spread").toFloat();
 	smallProb = s.value("smallProb").toFloat();
 	bigProb = s.value("bigProb").toFloat();
 	maxStartVel = s.value("maxStartVel").toFloat();
@@ -185,6 +186,9 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 {
 	if (event->key() == Qt::Key_Space)
 		initStars();
+
+	if (event->key() == Qt::Key_Escape)
+		close();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* me)
@@ -209,8 +213,8 @@ void MainWindow::initStars()
 {
 	std::random_device rd;
 	std::mt19937 random(rd());
-	std::uniform_real_distribution<float> randomPositionX(-width() / 2.0f, width() / 2.0f);
-	std::uniform_real_distribution<float> randomPositionY(-height() / 2.0f, height() / 2.0f);
+	std::uniform_real_distribution<float> randomPositionX(-width() / 2.0f * settings.spread, width() / 2.0f * settings.spread);
+	std::uniform_real_distribution<float> randomPositionY(-height() / 2.0f * settings.spread, height() / 2.0f * settings.spread);
 	std::uniform_real_distribution<float> randomVelocity(-settings.maxStartVel, settings.maxStartVel);
 	std::array<float, 3> x = {{settings.minSize, (settings.maxSize - settings.minSize) / 2.0f, settings.maxSize}};
 	std::array<float, 2> p = {{settings.smallProb, settings.bigProb}};

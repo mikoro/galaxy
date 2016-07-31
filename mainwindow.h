@@ -41,14 +41,15 @@ struct Settings
 	float maxSize = 30.0f;
 	float minAlpha = 0.1f;
 	float maxAlpha = 0.9f;
+	float spread = 2.5f;
 	float smallProb = 0.99f;
 	float bigProb = 0.01f;
-	float maxStartVel = 20.0f;
+	float maxStartVel = 2.0f;
 	bool rotateStart = false;
-	float minGravityDist = 1.0f;
-	float gravityCoeff = 0.1f;
-	float dragCoeff = 0.001f;
-	float mouseMass = 100.0f;
+	float minGravityDist = 10.0f;
+	float gravityCoeff = 0.4f;
+	float dragCoeff = 0.002f;
+	float mouseMass = 1000000.0f;
 
 	void load();
 };
